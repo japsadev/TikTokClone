@@ -18,7 +18,7 @@ class ViewController: UIViewController {
 		setupView()
 	}
 
-	//wewfwefwef
+	
 	func setupView() {
 		signUpButton.layer.cornerRadius = 18
 		facebookButton.layer.cornerRadius = 18
