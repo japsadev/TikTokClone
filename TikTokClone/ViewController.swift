@@ -25,6 +25,16 @@ class ViewController: UIViewController {
 		googleButton.layer.cornerRadius = 18
 		logInButton.layer.cornerRadius = 18
 	}
-
+	@IBAction func signUpDidTapped(_ sender: Any) {
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let viewController = storyboard.instantiateViewController(withIdentifier: "SignUpVC") as! SignUpVC
+		self.navigationController?.pushViewController(viewController, animated: true)
+	}
+	
+	@IBAction func signInDidTapped(_ sender: Any) {
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let viewController = storyboard.instantiateViewController(withIdentifier: "signInVC") as! SignInVC
+		self.navigationController?.pushViewController(viewController, animated: true)
+	}
 }
 
