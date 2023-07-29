@@ -33,7 +33,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func signInDidTapped(_ sender: Any) {
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
-		let viewController = storyboard.instantiateViewController(withIdentifier: "signInVC") as! SignInVC
+		let viewController = storyboard.instantiateViewController(withIdentifier: "SignInVC") as! SignInVC
 		self.navigationController?.pushViewController(viewController, animated: true)
 	}
 }
