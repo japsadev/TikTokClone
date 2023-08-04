@@ -97,53 +97,15 @@ class SignUpVC: UIViewController {
 	
 	@IBAction func signUpDidTapped(_ sender: Any) {
 		self.validateFields()
-		
-		guard let imageSelected = self.image else {
-			ProgressHUD.showError("Please enter an Profile Picture")
-			return
-		}
-		guard let imageData = imageSelected.jpegData(compressionQuality: 0.4) else {return}
-		
-		Auth.auth().createUser(withEmail: self.emailTextField.text!, password: self.passwordTextField.text!) { authDataResult, error in
-			if error != nil {
-				print(error!.localizedDescription)
-				return
+		self.signUp {
+			let scene = UIApplication.shared.connectedScenes.first
+			if let sd: SceneDelegate = (scene?.delegate as? SceneDelegate) {
+				sd.configureInitialViewController()
 			}
-			if let authData = authDataResult {
-				print(authData.user.email)
-				var dict: Dictionary<String, Any> = [
-					"uid": authData.user.uid,
-					"email": authData.user.email,
-					"username": self.usernameTextField.text!,
-					"profileImageUrl": "",
-					"status": ""
-				]
-				
-				let storageRef = Storage.storage().reference(forURL: "gs://tiktokclone-aef1b.appspot.com")
-				let storageProfileRef = storageRef.child("profile").child(authData.user.uid)
-				let metadata = StorageMetadata()
-				metadata.contentType = "image/jpg"
-				storageProfileRef.putData(imageData, metadata: metadata) { storageMetaData, error in
-				if error != nil {
-				print(error!.localizedDescription)
-				return
-				}
-					storageProfileRef.downloadURL { url, error in
-						if let metaImageUrl = url?.absoluteString {
-							print(metaImageUrl)
-							dict["profileImageUrl"] = metaImageUrl
-							Database.database().reference().child("users").child(authData.user.uid).updateChildValues(dict) { error, ref in
-								if error != nil {
-									print("Done")
-								}
-							}
-						}
-					}
-				}
-				
-				
-			}
+		} onError: { errorMessage in
+			ProgressHUD.showError(errorMessage)
 		}
+
 		
 	}
 }
@@ -174,4 +136,17 @@ extension SignUpVC: PHPickerViewControllerDelegate {
 		
 	}
 
+}
+
+extension SignUpVC {
+	func signUp(onSuccess: @escaping() -> Void, onError: @escaping(_ errorMessage: String) -> Void ) {
+		ProgressHUD.show("Loading...")
+		Api.User.signUp(withUsername: self.usernameTextField.text!, email: self.emailTextField.text!, password: self.passwordTextField.text!, image: self.image) {
+			ProgressHUD.dismiss()
+			onSuccess()
+		} onError: { errorMessage in
+			onError(errorMessage)
+		}
+
+	}
 }

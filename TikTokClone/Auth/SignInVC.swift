@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class SignInVC: UIViewController {
 
@@ -26,6 +27,46 @@ class SignInVC: UIViewController {
         
     }
     
+	
+	@IBAction func signInDidTapped(_ sender: Any) {
+		self.validateFields()
+		self.view.endEditing(true)
+		self.signIn {
+			let scene = UIApplication.shared.connectedScenes.first
+			if let sd: SceneDelegate = (scene?.delegate as? SceneDelegate) {
+				sd.configureInitialViewController()
+			}
+		} onError: { errorMessage in
+			ProgressHUD.showError(errorMessage)
+		}
+	}
+	
+}
+
+extension SignInVC {
+	func signIn(onSuccess: @escaping() -> Void, onError: @escaping(_ errorMessage: String) -> Void ) {
+		ProgressHUD.show("Loading...")
+		Api.User.signIn(email: self.emailTextField.text!, password: self.passwordTextField.text!) {
+			ProgressHUD.dismiss()
+			onSuccess()
+		} onError: { errorMessage in
+			onError(errorMessage)
+		}
+
+
+	}
+	
+	func validateFields() {
+		guard let email = self.emailTextField.text, !email.isEmpty else {
+			ProgressHUD.showError("Please enter an email")
+			return
+		}
+		guard let password = self.passwordTextField.text, !password.isEmpty else {
+			ProgressHUD.showError("Please enter an password")
+			return
+		}
+	}
+	
 	func setupNavigationBar() {
 		navigationItem.title = "Sign In"
 		navigationController?.navigationBar.prefersLargeTitles = true
@@ -46,5 +87,4 @@ class SignInVC: UIViewController {
 		emailContainerView.clipsToBounds = true
 		emailTextField.borderStyle = .none
 	}
-	
 }

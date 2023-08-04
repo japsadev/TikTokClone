@@ -1,13 +1,13 @@
 //
-//  ProfileVC.swift
+//  EditProfileVC.swift
 //  TikTokClone
 //
-//  Created by Salih Yusuf Göktaş on 31.07.2023.
+//  Created by Salih Yusuf Göktaş on 4.08.2023.
 //
 
 import UIKit
 
-class ProfileVC: UIViewController {
+class EditProfileVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1,13 +1,13 @@
 //
-//  CreatePostVC.swift
+//  ProfileUserVC.swift
 //  TikTokClone
 //
-//  Created by Salih Yusuf Göktaş on 31.07.2023.
+//  Created by Salih Yusuf Göktaş on 4.08.2023.
 //
 
 import UIKit
 
-class CreatePostVC: UIViewController {
+class ProfileUserVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
